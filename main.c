@@ -51,32 +51,20 @@ void printList(struct Node* head)
 }
 
 /* Function to delete a given node from the list */
-void deleteNode(struct Node* head, int key)
+int deleteNode(struct Node* head,struct Node* curr)
 {
     if (head == NULL)
-        return;
+        return -1;
 
-    // Find the required node
-    struct Node *curr = head, *prev;
-    while (curr->data != key)
-    {
-        if (curr->next == head)
-        {
-            printf("\nGiven node is not found"
-                   " in the list!!!");
-            break;
-        }
-
-        prev = curr;
-        curr = curr->next;
-    }
+    struct Node *prev = curr;
 
     // Check if node is only node
     if (curr->next == head)
     {
+        printf("%d",curr->data);
         head = NULL;
         free(curr);
-        return;
+        return 1;
     }
 
     // If more than one node, check if
@@ -91,16 +79,33 @@ void deleteNode(struct Node* head, int key)
         free(curr);
     }
 
-        // check if node is last node
+    // check if node is last node
     else if (curr->next == head && curr == head)
     {
+        printf("%d",curr->data);
         prev->next = head;
         free(curr);
+        return 1;
     }
     else
     {
         prev->next = curr->next;
         free(curr);
+    }
+    return 0;
+}
+
+int remove_step(struct Node* head,struct Node* curr, int step, int mod)
+{
+    int count = mod;
+    while (curr->next != head) {
+        if (count == step) {
+            if (deleteNode(head,curr) == 1)
+                return 1;
+            count = 0;
+        }
+        curr = curr->next;
+        count++;
     }
 }
 
@@ -109,21 +114,13 @@ int main()
 {
     /* Initialize lists as empty */
     struct Node* head = NULL;
-
-    /* Created linked list will be 2->5->7->8->10 */
-    push(&head, 2);
     push(&head, 5);
-    push(&head, 7);
-    push(&head, 8);
-    push(&head, 10);
+    push(&head, 4);
+    push(&head, 3);
+    push(&head, 2);
+    push(&head, 1);
 
-    printf("List Before Deletion: ");
-    printList(head);
-
-    deleteNode(head, 7);
-
-    printf("List After Deletion: ");
-    printList(head);
+    remove_step(head,head,2,1);
 
     return 0;
 }
