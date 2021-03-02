@@ -7,6 +7,7 @@
 struct Node {
     int data;
     struct Node* next;
+    struct Node* prev;
 };
 
 /* Function to insert a node at the beginning of
@@ -95,18 +96,21 @@ int deleteNode(struct Node* head,struct Node* curr)
     return 0;
 }
 
-int remove_step(struct Node* head,struct Node* curr, int step, int mod)
+int remove_step(struct Node* head,int step)
 {
-    int count = mod;
-    while (curr->next != head) {
+    int count = 0;
+    struct Node *curr = head;
+    while (head != head->next) {
         if (count == step) {
-            if (deleteNode(head,curr) == 1)
-                return 1;
+            printf("Sai o %d : ",curr->data);
+            deleteNode(head,curr);
             count = 0;
         }
         curr = curr->next;
         count++;
     }
+    printf("%d",curr->data);
+    return 0;
 }
 
 /* Driver code */
@@ -120,7 +124,7 @@ int main()
     push(&head, 2);
     push(&head, 1);
 
-    remove_step(head,head,2,1);
+    remove_step(head,2);
 
     return 0;
 }
